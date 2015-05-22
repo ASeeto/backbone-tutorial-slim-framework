@@ -84,7 +84,11 @@ git clone https://github.com/ASeeto/TuxSeeto
 		```
 		RewriteEngine On
 		
+		RewriteBase /
+		
 		RewriteCond %{REQUEST_FILENAME} !-f
+		
+		RewriteCond %{REQUEST_FILENAME} !-d
 		
 		RewriteRule ^ index.php [QSA,L]
 		```
