@@ -107,8 +107,10 @@ git clone https://github.com/ASeeto/TuxSeeto
 		
 		This should allow .htaccess to perform URL rewriting!
 
-## Backbone.js  
+## Backbone.js
+Download or reference resource from the following link:  
 https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.0/backbone-min.js
 
-## Underscore.js  
+## Underscore.js
+Download or reference resource from the following link:  
 https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js
