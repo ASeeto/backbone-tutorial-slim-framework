@@ -103,7 +103,7 @@ git clone https://github.com/ASeeto/TuxSeeto
 		```AllowOverride All```  
 		This should allow .htaccess to perform URL rewriting!
 
-## Backbones.js  
+## Backbone.js  
 ```
 https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.0/backbone-min.js
 ```
