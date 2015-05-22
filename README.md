@@ -65,17 +65,43 @@ git clone https://github.com/ASeeto/TuxSeeto
     ```
 
 # Resources
-## Slim Framework
-- Download Zip  
-```
-https://github.com/slimphp/Slim/releases
-```
-- Or, Install using Composer  
-```
-cd TuxSeeto
-php composer.phar install
-php composer.phar update
-```
+## Slim Framework v2
+1. Download Zip  
+	```
+	https://github.com/slimphp/Slim/releases
+	```  
+	Or, Install using Composer  
+	```
+	cd TuxSeeto
+	
+	php composer.phar install
+	
+	php composer.phar update
+	```
+2. URL Rewriting
+	1. Create a .htaccess file  
+		```
+		vi .htaccess
+		```
+		Include the following in the file:  
+		```
+		RewriteEngine On
+		
+		RewriteCond %{REQUEST_FILENAME} !-f
+		
+		RewriteRule ^ index.php [QSA,L]
+		```
+	2. Navigate to the following directory on your server:  
+		```
+		/etc/httpd/conf/httpd.conf
+		```
+	3. Locate the code block for  
+		```<Directory "/var/www/html">```  
+		Replace the following:  
+		```AllowOverRide None```  
+		With the following:  
+		```AllowOverride All```  
+		This should allow .htaccess to perform URL rewriting!
 
 ## Backbones.js  
 ```
