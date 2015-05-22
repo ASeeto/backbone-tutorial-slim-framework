@@ -17,10 +17,8 @@ git clone https://github.com/ASeeto/TuxSeeto
 - Underscore.js
 
 # Server Set-Up (LAMP installation)
-1. Create a new droplet using CentOS 7 as the image  
-	```
+1. Create a new droplet using CentOS 7 as the image via  
 	https://cloud.digitalocean.com/droplets/new
-	```
 2. In terminal, connect to droplet  
 	```
 	ssh root@{DROPLET_IP_ADDRESS}
@@ -66,10 +64,9 @@ git clone https://github.com/ASeeto/TuxSeeto
 
 # Resources
 ## Slim Framework v2
-1. Download Zip  
-	```
-	https://github.com/slimphp/Slim/releases
-	```  
+1. Download Zip via  
+	https://github.com/slimphp/Slim/releases  
+  
 	Or, Install using Composer  
 	```
 	cd TuxSeeto
@@ -97,10 +94,13 @@ git clone https://github.com/ASeeto/TuxSeeto
 		```
 	3. Locate the code block for  
 		```<Directory "/var/www/html">```  
+
 		Replace the following:  
 		```AllowOverRide None```  
+		
 		With the following:  
 		```AllowOverride All```  
+		
 		This should allow .htaccess to perform URL rewriting!
 
 ## Backbone.js  
