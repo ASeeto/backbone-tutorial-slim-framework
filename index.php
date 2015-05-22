@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-    <title>TuxSeeto - RESTful API</title>
-    <meta name="description" content="A web application for practice.">
-</head>
-<body>
-	Test
 <?php
 /**
  * Step 1: Require the Slim Framework
