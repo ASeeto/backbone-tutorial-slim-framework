@@ -15,7 +15,7 @@ class Model_Item{
     }
 }
 
-class Model_ItemFinder {
+class Model_ItemSQL {
     /**
     * Returns an Instance of Model_Item
     */
@@ -24,5 +24,29 @@ class Model_ItemFinder {
         $result = $db->query($sql);
         return $result;
     }
+    /**
+    * Returns an Instance of Model_Item
+    */
+    public function removeItem($id) {
+        $sql = "DELETE FROM items WHERE id = $id";
+        $result = $db->query($sql);
+        return $result;
+    }
+    /**
+    * Returns an Instance of Model_Item
+    */
+    // public function addItem($name, $price) {
+    //     $sql = "INSERT INTO items VALUES($name, $price)";
+    //     $result = $db->query($sql);
+    //     return $result;
+    // }
+    /**
+    * Returns an Instance of Model_Item
+    */
+    // public function updateItem($id, $name, $price) {
+    //     $sql = "UPDATE items SET name = $name, price = $price WHERE id = $id";
+    //     $result = $db->query($sql);
+    //     return $result;
+    // }
 }
 ?>

@@ -32,32 +32,43 @@ $app = new \Slim\Slim();
  */
 
 // GET route
-$app->get('/api/item/:id', function () use ($app) {
+$app->get('/api/item/:id', function ($app) {
     $request = (array) json_decode($app->request()->getBody());
 
     $id = $request['id'];
 
-    // $friend is an instance of Model_Friend
-    $item = Model_ItemFinder::getById($id);
+    // $item is an instance of Model_Item
+    $item = Model_ItemSQL::getById($id);
 
     $app->response()->header('Content-Type', 'application/json');
     echo json_encode($item);
 });
 
-// POST route
-$app->post('/api/item', function () {
-    echo 'This is a POST route';
+// DELETE route
+$app->delete('/api/delete/:id', function ($app) {
+    $request = (array) json_decode($app->request()->getBody());
+    $id = $request['id'];
+    Model_ItemSQL::removeItem($id);
 });
+
+// POST route
+// $app->post('/api/item', function ($app) {
+//     $request = (array) json_decode($app->request()->getBody());
+//     Model_ItemSQL::addItem();
+// });
 
 // PUT route
-$app->put('/api/item', function () {
-    echo 'This is a PUT route';
-});
+// $app->put('/api/item/:id', function ($app) {
+//     $request = (array) json_decode($app->request()->getBody());
 
-// DELETE route
-$app->delete('/api/delete', function () {
-    echo 'This is a DELETE route';
-});
+//     $id = $request['id'];
+
+//     // $item is an instance of Model_Item
+//     $item = Model_ItemSQL::updateItem($id);
+
+//     $app->response()->header('Content-Type', 'application/json');
+//     echo json_encode($item);
+// });
 
 /**
  * Step 4: Run the Slim application
