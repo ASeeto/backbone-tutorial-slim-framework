@@ -21,7 +21,10 @@ require 'Model_Item.php';
  * of setting names and values into the application constructor.
  */
 $app = new \Slim\Slim();
-
+$model = new Model_Item();
+$app->error(function(\Exception $e) use ($app) {
+    $app->render('error.php', array('message' => $e->getMessage()));
+});
 /**
  * Step 3: Define the Slim application routes
  *
@@ -32,7 +35,17 @@ $app = new \Slim\Slim();
  */
 
 // GET route
-$app->get('/api/item/:id', function ($app) {
+$app->get('/api/item', function () use ($app) {
+    $request = (array) json_decode($app->request()->getBody());
+
+    // $item is an instance of Model_Item
+    $items = Model_ItemSQL::getItems();
+
+    $app->response()->header('Content-Type', 'application/json');
+    echo json_encode($items);
+});
+
+$app->get('/api/item/:id', function () use ($app) {
     $request = (array) json_decode($app->request()->getBody());
 
     $id = $request['id'];
@@ -45,30 +58,27 @@ $app->get('/api/item/:id', function ($app) {
 });
 
 // DELETE route
-$app->delete('/api/delete/:id', function ($app) {
+$app->delete('/api/delete/:id', function () use ($app) {
     $request = (array) json_decode($app->request()->getBody());
     $id = $request['id'];
     Model_ItemSQL::removeItem($id);
+    $app->redirect('/');
 });
 
 // POST route
-// $app->post('/api/item', function ($app) {
-//     $request = (array) json_decode($app->request()->getBody());
-//     Model_ItemSQL::addItem();
-// });
+$app->post('/api/item', function () use ($app) {
+    $request = (array) json_decode($app->request()->getBody());
+    Model_ItemSQL::addItem($_POST["name"], $_POST["price"]);
+    $app->redirect('/');
+});
 
 // PUT route
-// $app->put('/api/item/:id', function ($app) {
-//     $request = (array) json_decode($app->request()->getBody());
-
-//     $id = $request['id'];
-
-//     // $item is an instance of Model_Item
-//     $item = Model_ItemSQL::updateItem($id);
-
-//     $app->response()->header('Content-Type', 'application/json');
-//     echo json_encode($item);
-// });
+$app->put('/api/item/:id', function () use ($app) {
+    $request = (array) json_decode($app->request()->getBody());
+    $id = $request['id'];
+    Model_ItemSQL::updateItem($id, $_POST["name"], $_POST["price"]);
+    $app->redirect('/');
+});
 
 /**
  * Step 4: Run the Slim application
@@ -78,5 +88,3 @@ $app->delete('/api/delete/:id', function ($app) {
  */
 $app->run();
 ?>
-</body>
-</html>

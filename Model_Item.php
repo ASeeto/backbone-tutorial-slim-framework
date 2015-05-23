@@ -19,6 +19,14 @@ class Model_ItemSQL {
     /**
     * Returns an Instance of Model_Item
     */
+    public function getItems() {
+        $sql = "SELECT * FROM items";
+        $result = $db->query($sql);
+        return $result;
+    }
+    /**
+    * Returns an Instance of Model_Item
+    */
     public function getById($id) {
         $sql = "SELECT * FROM items WHERE id = $id";
         $result = $db->query($sql);
@@ -30,23 +38,23 @@ class Model_ItemSQL {
     public function removeItem($id) {
         $sql = "DELETE FROM items WHERE id = $id";
         $result = $db->query($sql);
-        return $result;
+        return;
     }
     /**
     * Returns an Instance of Model_Item
     */
-    // public function addItem($name, $price) {
-    //     $sql = "INSERT INTO items VALUES($name, $price)";
-    //     $result = $db->query($sql);
-    //     return $result;
-    // }
+    public function addItem($name, $price) {
+        $sql = "INSERT INTO items VALUES($name, $price)";
+        $result = $db->query($sql);
+        return;
+    }
     /**
     * Returns an Instance of Model_Item
     */
-    // public function updateItem($id, $name, $price) {
-    //     $sql = "UPDATE items SET name = $name, price = $price WHERE id = $id";
-    //     $result = $db->query($sql);
-    //     return $result;
-    // }
+    public function updateItem($id, $name, $price) {
+        $sql = "UPDATE items SET name = $name, price = $price WHERE id = $id";
+        $result = $db->query($sql);
+        return;
+    }
 }
 ?>
