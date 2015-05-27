@@ -64,11 +64,17 @@ git clone https://github.com/ASeeto/TuxSeeto
 
 # Resources
 ## Slim Framework v2
-1. Download Zip via  
-	https://github.com/slimphp/Slim/releases  
-  
-	Or, Install using Composer  
+1. Install using Composer:  
+	https://getcomposer.org/download/  
+
+	Here are the commands to install Composer and Slim:  
 	```
+	curl -sS https://getcomposer.org/installer | php
+	
+	php composer install
+	
+	php composer update
+	
 	cd TuxSeeto
 	
 	php composer.phar install
