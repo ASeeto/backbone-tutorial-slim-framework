@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Step 1: Require the Slim Framework
  *
@@ -7,10 +8,8 @@
  *
  * If you are using Composer, you can skip this step.
  */
-require 'Slim/Slim.php';
-require 'Model_Item.php';
-
-\Slim\Slim::registerAutoloader();
+// require 'Slim/Slim.php';
+require 'vendor/autoload.php';
 
 /**
  * Step 2: Instantiate a Slim application
@@ -21,10 +20,7 @@ require 'Model_Item.php';
  * of setting names and values into the application constructor.
  */
 $app = new \Slim\Slim();
-$model = new Model_Item();
-$app->error(function(\Exception $e) use ($app) {
-    $app->render('error.php', array('message' => $e->getMessage()));
-});
+
 /**
  * Step 3: Define the Slim application routes
  *
@@ -35,49 +31,75 @@ $app->error(function(\Exception $e) use ($app) {
  */
 
 // GET route
-$app->get('/api/item', function () use ($app) {
-    $request = (array) json_decode($app->request()->getBody());
-
-    // $item is an instance of Model_Item
-    $items = Model_ItemSQL::getItems();
-
-    $app->response()->header('Content-Type', 'application/json');
-    echo json_encode($items);
+$app->get('/', function () use ($app) {
+    echo "<h1>Welcome</h1>";
+    echo "<a href=\"/api/item\">View All Items</a>";
 });
 
-$app->get('/api/item/:id', function () use ($app) {
-    $request = (array) json_decode($app->request()->getBody());
+// GET route
+$app->get('/api/item', function () use ($app) {
+ 
+    /** Execute SQL and store result */
+    require_once 'Item.php';
+    $model = new Item();
+    $items = $model->getItems();
 
-    $id = $request['id'];
+    /** Return response data (JSON) to page */
+    $app->response()->header('Content-Type', 'application/json');
+    echo json_encode($items);
 
-    // $item is an instance of Model_Item
-    $item = Model_ItemSQL::getById($id);
+});
 
+$app->get('/api/item/:id', function ($id) use ($app) {
+    
+    /** Execute SQL and store result */
+    require_once 'Item.php';
+    $model = new Item();
+    $item = $model->getItem((int) $id);
+
+    /** Return response data (JSON) to page */
     $app->response()->header('Content-Type', 'application/json');
     echo json_encode($item);
+
 });
 
 // DELETE route
-$app->delete('/api/delete/:id', function () use ($app) {
-    $request = (array) json_decode($app->request()->getBody());
-    $id = $request['id'];
-    Model_ItemSQL::removeItem($id);
-    $app->redirect('/');
+$app->delete('/api/item/delete/:id', function ($id) use ($app) {
+    
+    /** Execute SQL and store result */
+    require_once 'Item.php';
+    $model = new Item();
+    $model->removeItem((int) $id);
+
+    /** Redirect to Home (List All Items) */
+    $app->redirect('/api/item');
+
 });
 
 // POST route
-$app->post('/api/item', function () use ($app) {
-    $request = (array) json_decode($app->request()->getBody());
-    Model_ItemSQL::addItem($_POST["name"], $_POST["price"]);
-    $app->redirect('/');
+$app->post('/api/item/add/:name/:price', function ($name, $price) use ($app) {
+    
+    /** Execute SQL and store result */
+    require_once 'Item.php';
+    $model = new Item();
+    $model->addItem($name, $price);
+
+    /** Redirect to Home (List All Items) */
+    $app->redirect('/api/item');
+
 });
 
 // PUT route
-$app->put('/api/item/:id', function () use ($app) {
-    $request = (array) json_decode($app->request()->getBody());
-    $id = $request['id'];
-    Model_ItemSQL::updateItem($id, $_POST["name"], $_POST["price"]);
-    $app->redirect('/');
+$app->put('/api/item/update/:id/:name/:price', function ($id, $name, $price) use ($app) {
+    
+    /** Execute SQL and store result */
+    require_once 'Item.php';
+    $model = new Item();
+    $model->updateItem($id, $name, $price);
+
+    /** Redirect to Home (List All Items) */
+    $app->redirect('/api/item');
+
 });
 
 /**
@@ -87,4 +109,5 @@ $app->put('/api/item/:id', function () use ($app) {
  * and returns the HTTP response to the HTTP client.
  */
 $app->run();
+
 ?>
