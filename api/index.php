@@ -93,7 +93,7 @@ $app->post('/api/item/:name/:price', function ($name, $price) use ($app) {
 });
 
 // PUT route
-$app->put('/api/item/:id/:name/:price', function ($id, $name, $price) use ($app) {
+$app->put('/api/item/:id', function ($id, $name, $price) use ($app) {
     
     /** Execute SQL and store result */
     require_once 'item.php';

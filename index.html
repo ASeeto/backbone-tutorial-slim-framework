@@ -29,9 +29,9 @@
         <tbody>
         <% _.each(items, function(item) { %>
             <tr>
-                <td><%= item.get('id') %></td>
-                <td><%= item.get('name') %></td>
-                <td><%= item.get('price') %></td>
+                <td><%= htmlEncode(item.get('id')) %></td>
+                <td><%= htmlEncode(item.get('name')) %></td>
+                <td><%= htmlEncode(item.get('price')) %></td>
                 <td><a class="btn" href="#/edit/<%= item.id %>">Edit</a></td>
             </tr>
         <% }); %>
@@ -39,8 +39,44 @@
     </table>
 </script>
 
+<script type="text/template" id="edit-item-template">
+    <form class="edit-item-form">
+        <legend><%= item ? 'Edit' : 'New' %> Item</legend>
+            <label>Name</label>
+            <input name="name" type="text" value="<%= name ? item.get('name') : '' %>">
+            <label>Price</label>
+            <input name="price" type="text" value="<%= item ? item.get('price') : '' %>">
+            <hr />
+            <button type="submit" class="btn"><%= item ? 'Update' : 'Create' %></button>
+            <% if(item) { %>
+            <input type="hidden" name="id" value="<%= item.id %>" />
+            <button data-item-id="<%= item.id %>" class="btn btn-danger delete">Delete</button>
+        <% }; %>
+    </form>
+</script>
+
 <script>
+    function htmlEncode(value){
+      return $('<div/>').text(value).html();
+    }
+    $.fn.serializeObject = function() {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+            if (o[this.name] !== undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    }
+
     var Item = Backbone.Model.extend({
+        url: '/api/index.php/api/item',
         defaults:{
             "id":null,
             "name":"Special TuxSeeto",
@@ -75,11 +111,57 @@
     // Initialize a new Item List View to be rendered
     var itemListView = new ItemListView();
 
-    // Router
+    // View for Edit List
+    var EditItemView = Backbone.View.extend({
+        el: '.page',
+            events: {
+                'submit .edit-item-form': 'saveItem',
+                'click .delete': 'deleteItem'
+        },
+        saveItem: function (ev) {
+            var itemDetails = $(ev.currentTarget).serializeObject();
+            var item = new Item();
+            item.save(itemDetails, {
+                success: function (item) {
+                    router.navigate('', {trigger:true});
+                }
+            });
+            return false;
+        },
+        deleteItem: function (ev) {
+            this.item.destroy({
+                success: function () {
+                    //console.log('destroyed');
+                    router.navigate('', {trigger:true});
+                }
+            })
+        },
+        render: function (options) {
+            var that = this;
+            if(options.id) {
+                that.item = new Item({id: options.id});
+                that.item.fetch({
+                    success: function (item) {    
+                        var template = _.template($('#edit-item-template').html(), {item: item});
+                        that.$el.html(template);
+                    }
+                })
+            } else {
+                var template = _.template($('#edit-item-template').html(), {item: null});
+                that.$el.html(template);
+            }
+        }
+    });
+
+    // Initialize a new Edit List View to be rendered
+    var editItemView = new EditItemView();
+
+    // Routes!!!
     var Router = Backbone.Router.extend({
         routes: {
-          // home event called
           "": "home", 
+          "edit/:id": "edit",
+          "new": "edit"
         }
     });
 
@@ -91,6 +173,11 @@
         // render item list
         itemListView.render();
     })
+    // listening for edit event 
+    router.on('route:edit', function(id) {
+        editItemView.render({id: id})
+    })
+
     Backbone.history.start();
 </script>
 
