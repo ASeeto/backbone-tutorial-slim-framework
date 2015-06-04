@@ -1,6 +1,5 @@
 # TuxSeeto
-- Test RESTful API
-- Mock Shopping Cart for practice
+- PHP, Slim, MySQL, Backbone.js :: RESTful API
 
 # Clone this project
 ```
