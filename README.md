@@ -90,8 +90,6 @@ git clone https://github.com/ASeeto/TuxSeeto
 		```
 		RewriteEngine On
 		
-		RewriteBase /
-		
 		RewriteCond %{REQUEST_FILENAME} !-f
 		
 		RewriteCond %{REQUEST_FILENAME} !-d
@@ -120,3 +118,22 @@ https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.0/backbone-min.js
 ## Underscore.js
 Download or reference resource from the following link:  
 https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js
+
+# Troubleshooting
+## 403 Forbidden Error:
+- Correct the file permissions so Apache is able to access referenced files
+- sudo chmod 0777 
+
+## 404 Page Not Found:
+- Try http://yoursite/api/index.php/api/item
+
+## 500 Internal Server Error:
+- Be sure Slim autoloader is registered
+- The following line should exist following initialization of new Slim:  
+	```
+	\Slim\Slim::registerAutoloader();
+	```
+- Check error log in following directory:  
+	```
+	/var/log/httpd
+	```

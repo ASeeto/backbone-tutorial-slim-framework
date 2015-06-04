@@ -8,8 +8,8 @@
  *
  * If you are using Composer, you can skip this step.
  */
-// require 'Slim/Slim.php';
-require 'vendor/autoload.php';
+require 'Slim/Slim.php';
+\Slim\Slim::registerAutoloader();
 
 /**
  * Step 2: Instantiate a Slim application
@@ -31,21 +31,24 @@ $app = new \Slim\Slim();
  */
 
 // GET route
-$app->get('/', function () use ($app) {
-    echo "<h1>Welcome</h1>";
-    echo "<a href=\"/api/item\">View All Items</a>";
-});
+// $app->get('/', function () use ($app) {
+
+//     /** Return response data HTML to page */
+//     $app->response->header->set('Content-Type', 'text/html');
+//     echo 'index.html';
+
+// });
 
 // GET route
 $app->get('/api/item', function () use ($app) {
- 
+    // echo "Items test!";
     /** Execute SQL and store result */
-    require_once 'Item.php';
+    require_once 'item.php';
     $model = new Item();
     $items = $model->getItems();
 
     /** Return response data (JSON) to page */
-    $app->response()->header('Content-Type', 'application/json');
+    $app->response()->headers->set('Content-Type', 'application/json');
     echo json_encode($items);
 
 });
@@ -53,21 +56,21 @@ $app->get('/api/item', function () use ($app) {
 $app->get('/api/item/:id', function ($id) use ($app) {
     
     /** Execute SQL and store result */
-    require_once 'Item.php';
+    require_once 'item.php';
     $model = new Item();
     $item = $model->getItem((int) $id);
 
     /** Return response data (JSON) to page */
-    $app->response()->header('Content-Type', 'application/json');
+    $app->response->headers->set('Content-Type', 'application/json');
     echo json_encode($item);
 
 });
 
 // DELETE route
-$app->delete('/api/item/delete/:id', function ($id) use ($app) {
+$app->delete('/api/item/:id', function ($id) use ($app) {
     
     /** Execute SQL and store result */
-    require_once 'Item.php';
+    require_once 'item.php';
     $model = new Item();
     $model->removeItem((int) $id);
 
@@ -77,10 +80,10 @@ $app->delete('/api/item/delete/:id', function ($id) use ($app) {
 });
 
 // POST route
-$app->post('/api/item/add/:name/:price', function ($name, $price) use ($app) {
+$app->post('/api/item/:name/:price', function ($name, $price) use ($app) {
     
     /** Execute SQL and store result */
-    require_once 'Item.php';
+    require_once 'item.php';
     $model = new Item();
     $model->addItem($name, $price);
 
@@ -90,10 +93,10 @@ $app->post('/api/item/add/:name/:price', function ($name, $price) use ($app) {
 });
 
 // PUT route
-$app->put('/api/item/update/:id/:name/:price', function ($id, $name, $price) use ($app) {
+$app->put('/api/item/:id/:name/:price', function ($id, $name, $price) use ($app) {
     
     /** Execute SQL and store result */
-    require_once 'Item.php';
+    require_once 'item.php';
     $model = new Item();
     $model->updateItem($id, $name, $price);
 

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mock Shopping Cart</title>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container">
+<h1>Product Listings</h1>
+<hr />
+<div class="page"></div>
+</div>
+
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script src="js/underscore-min.js" type="text/javascript"></script>
+<script src="js/backbone-min.js"></script>
+
+<script type="text/template" id="item-list-template">
+    <a href="#/new" class="btn btn-primary">New</a>
+    <hr />
+    <table class="table striped">
+        <thead>
+            <tr>
+                <th>ID</th><th>Name</th><th>Price</th><th></th>
+            </tr>
+        </thead>
+        <tbody>
+        <% _.each(items, function(item) { %>
+            <tr>
+                <td><%= item.get('id') %></td>
+                <td><%= item.get('name') %></td>
+                <td><%= item.get('price') %></td>
+                <td><a class="btn" href="#/edit/<%= item.id %>">Edit</a></td>
+            </tr>
+        <% }); %>
+        </tbody>
+    </table>
+</script>
+
+<script>
+    var Item = Backbone.Model.extend({
+        defaults:{
+            "id":null,
+            "name":"Special TuxSeeto",
+            "price":"5.99"
+        }
+    });
+
+    var Items = Backbone.Collection.extend({
+        model: Item,
+        url: '/api/index.php/api/item'
+    });
+
+    // View for Item List
+    var ItemListView = Backbone.View.extend({
+        el: '.page',
+        render: function () {
+            var that = this;
+            var items = new Items();
+            items.fetch({
+                success: function (items) {
+                    // that.$el.html( ' Content should be here. ');
+                    var template = _.template($('#item-list-template').html(), {items: items.models});
+                    that.$el.html(template);
+                },
+                error: function (){
+                    that.$el.html( ' Error when fetching collection. ');
+                }
+            })
+        }
+    });
+
+    // Initialize a new Item List View to be rendered
+    var itemListView = new ItemListView();
+
+    // Router
+    var Router = Backbone.Router.extend({
+        routes: {
+          // home event called
+          "": "home", 
+        }
+    });
+
+    // Initialize a new Router
+    var router = new Router;
+
+    // listening for home event 
+    router.on('route:home', function() {
+        // render item list
+        itemListView.render();
+    })
+    Backbone.history.start();
+</script>
+
+</body>
+</html>
