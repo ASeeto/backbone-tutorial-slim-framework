@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>Mock Shopping Cart</title>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 </head>
 <body>
@@ -43,7 +44,7 @@
     <form class="edit-item-form">
         <legend><%= item ? 'Edit' : 'New' %> Item</legend>
             <label>Name</label>
-            <input name="name" type="text" value="<%= name ? item.get('name') : '' %>">
+            <input name="name" type="text" value="<%= item ? item.get('name') : '' %>">
             <label>Price</label>
             <input name="price" type="text" value="<%= item ? item.get('price') : '' %>">
             <hr />
@@ -76,16 +77,15 @@
     }
 
     var Item = Backbone.Model.extend({
-        url: '/api/index.php/api/item',
-        defaults:{
-            "id":null,
-            "name":"Special TuxSeeto",
-            "price":"5.99"
+        urlRoot: '/api/index.php/api/item',
+        parse: function(data){
+            if(null != data){
+                return data[0];
+            }
         }
     });
 
     var Items = Backbone.Collection.extend({
-        model: Item,
         url: '/api/index.php/api/item'
     });
 
@@ -97,7 +97,6 @@
             var items = new Items();
             items.fetch({
                 success: function (items) {
-                    // that.$el.html( ' Content should be here. ');
                     var template = _.template($('#item-list-template').html(), {items: items.models});
                     that.$el.html(template);
                 },
@@ -131,7 +130,6 @@
         deleteItem: function (ev) {
             this.item.destroy({
                 success: function () {
-                    //console.log('destroyed');
                     router.navigate('', {trigger:true});
                 }
             })
@@ -141,7 +139,7 @@
             if(options.id) {
                 that.item = new Item({id: options.id});
                 that.item.fetch({
-                    success: function (item) {    
+                    success: function (item) {
                         var template = _.template($('#edit-item-template').html(), {item: item});
                         that.$el.html(template);
                     }

@@ -41,67 +41,105 @@ $app = new \Slim\Slim();
 
 // GET route
 $app->get('/api/item', function () use ($app) {
-    // echo "Items test!";
-    /** Execute SQL and store result */
-    require_once 'item.php';
-    $model = new Item();
-    $items = $model->getItems();
+
+    /** Connect to Database */
+    require_once 'dbconfig.php';
+    $db = connect_db();
+
+    /** Execute SQL and return result */
+    $sql = "SELECT * FROM items";
+    $result = mysqli_query($db, $sql);
+    while($row = mysqli_fetch_array($result))
+    {
+        $results[] = array(
+            'id'    => $row['id'],
+            'name'  => $row['name'],
+            'price' => $row['price']
+        );
+    }
 
     /** Return response data (JSON) to page */
     $app->response()->headers->set('Content-Type', 'application/json');
-    echo json_encode($items);
+    echo json_encode($results);
 
 });
 
 $app->get('/api/item/:id', function ($id) use ($app) {
     
-    /** Execute SQL and store result */
-    require_once 'item.php';
-    $model = new Item();
-    $item = $model->getItem((int) $id);
+    /** Connect to Database */
+    require_once 'dbconfig.php';
+    $db = connect_db();
+
+    /** Execute SQL and return result */
+    $sql = "SELECT * FROM items WHERE id = \"$id\"";
+    $result = mysqli_query($db, $sql);
+    while($row = mysqli_fetch_array($result))
+    {
+        $results[] = array(
+            'id'    => $row['id'],
+            'name'  => $row['name'],
+            'price' => $row['price']
+        );
+    }
 
     /** Return response data (JSON) to page */
     $app->response->headers->set('Content-Type', 'application/json');
-    echo json_encode($item);
+    echo json_encode($results);
+
+});
+
+// POST route
+$app->post('/api/item', function () use ($app) {
+
+    /** Parse request for passed in data */
+    $request = $app->request();
+    $body = json_decode($request->getBody());
+
+    /** Initialize variables for values taken from request body */
+    $name = $body->name;
+    $price = $body->price;
+
+    /** Connect to Database */
+    require_once 'dbconfig.php';
+    $db = connect_db();
+
+    /** Execute SQL and return result */
+    $sql = "INSERT INTO items(name, price) VALUES(\"$name\", \"$price\")";
+    mysqli_query($db, $sql);
+
+});
+
+// PUT route
+$app->put('/api/item/:id', function ($id) use ($app) {
+    
+    /** Parse request for passed in data */
+    $request = $app->request();
+    $body = json_decode($request->getBody());
+
+    /** Initialize variables for values taken from request body */
+    $name = $body->name;
+    $price = $body->price;
+
+    /** Connect to Database */
+    require_once 'dbconfig.php';
+    $db = connect_db();
+
+    /** Execute SQL and return result */
+    $sql = "UPDATE items SET name = \"$name\", price = \"$price\" WHERE id = \"$id\"";
+    mysqli_query($db, $sql);
 
 });
 
 // DELETE route
 $app->delete('/api/item/:id', function ($id) use ($app) {
     
-    /** Execute SQL and store result */
-    require_once 'item.php';
-    $model = new Item();
-    $model->removeItem((int) $id);
+    /** Connect to Database */
+    require_once 'dbconfig.php';
+    $db = connect_db();
 
-    /** Redirect to Home (List All Items) */
-    $app->redirect('/api/item');
-
-});
-
-// POST route
-$app->post('/api/item/:name/:price', function ($name, $price) use ($app) {
-    
-    /** Execute SQL and store result */
-    require_once 'item.php';
-    $model = new Item();
-    $model->addItem($name, $price);
-
-    /** Redirect to Home (List All Items) */
-    $app->redirect('/api/item');
-
-});
-
-// PUT route
-$app->put('/api/item/:id', function ($id, $name, $price) use ($app) {
-    
-    /** Execute SQL and store result */
-    require_once 'item.php';
-    $model = new Item();
-    $model->updateItem($id, $name, $price);
-
-    /** Redirect to Home (List All Items) */
-    $app->redirect('/api/item');
+    /** Execute SQL and return result */
+    $sql = "DELETE FROM items WHERE id = \"$id\"";
+    mysqli_query($db, $sql);
 
 });
 
