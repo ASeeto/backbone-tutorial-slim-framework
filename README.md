@@ -63,6 +63,8 @@ git clone https://github.com/ASeeto/TuxSeeto
 
 # Resources
 ## Slim Framework v2
+A pre-packaged RESTful framework that has all the necessary functions built in to execute Backbone server queries
+
 1. Install using Composer:  
 	https://getcomposer.org/download/  
 
