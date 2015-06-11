@@ -1,6 +1,14 @@
+/**
+ *  DEFAULT variables for my personal directory hierarchy
+ */
+var BASEURL = '/projects/';
+var PROJECT = 'backbone-tutorial';
+var SLIMLOC = BASEURL+PROJECT+'/api'+'/index.php/api';
+
 function htmlEncode(value){
-  return $('<div/>').text(value).html();
+    return $('<div/>').text(value).html();
 }
+
 $.fn.serializeObject = function() {
     var o = {};
     var a = this.serializeArray();
@@ -18,7 +26,7 @@ $.fn.serializeObject = function() {
 }
 
 var Item = Backbone.Model.extend({
-    urlRoot: '/api/index.php/api/item',
+    urlRoot: SLIMLOC+'/item',
     parse: function(data){
         if(null != data){
             return data[0];
@@ -27,7 +35,7 @@ var Item = Backbone.Model.extend({
 });
 
 var Items = Backbone.Collection.extend({
-    url: '/api/index.php/api/item'
+    url: SLIMLOC+'/item'
 });
 
 // View for Item List

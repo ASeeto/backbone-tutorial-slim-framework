@@ -31,15 +31,6 @@ $app = new \Slim\Slim();
  */
 
 // GET route
-// $app->get('/', function () use ($app) {
-
-//     /** Return response data HTML to page */
-//     $app->response->header->set('Content-Type', 'text/html');
-//     echo 'index.html';
-
-// });
-
-// GET route
 $app->get('/api/item', function () use ($app) {
 
     /** Connect to Database */
