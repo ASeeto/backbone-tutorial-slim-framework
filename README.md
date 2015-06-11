@@ -1,74 +1,57 @@
-# TuxSeeto
-- PHP, Slim, MySQL, Backbone.js :: RESTful API
+# backbone-tutorial-slim-framework
+[Backbone Tutorial](https://github.com/thomasdavis/backbonetutorials/tree/gh-pages/videos/beginner) is a simple user registration application built with [Backbone.js](http://documentcloud.github.com/backbone/). The application allows you to Create, Read, Update, and Delete users via a web admin tool.
 
-# Clone this project
-```
-git clone https://github.com/ASeeto/TuxSeeto
-```
+Further expanding upon this project, I have reimplemented the server side utilizing [Slim Framework](https://github.com/slimphp/Slim). In addition, minor changes to the front end components of the code has converted this project to an admin console for product listings as opposed to a user database.
 
-# Resources
-- Slim Framework v2
-- Backbone.js
-- Underscore.js
+# Manual Setup
+Prerequisites: LAMP Server (Linux, Apache, MySQL, PHP) - [10 Step Guide](https://gist.github.com/ASeeto/1ebec9b2802c0469f848)
 
-# Resources
-## Slim Framework v2
-A pre-packaged RESTful framework that has all the necessary functions built in to execute Backbone server queries
+1) Clone the project:  
+  ```
+  git clone https://github.com/ASeeto/backbone-tutorial-slim-framework
+  ```
 
-1. Install using Composer:  
-	https://getcomposer.org/download/  
+2) Create a MySQL database named 'project':  
+  - Execute items.sql to create and populate the "items" table:  
+  ```
+  mysql directory -uroot < items.sql
+  ```
 
-	Here are the commands to install Composer and Slim:  
-	```
-	curl -sS https://getcomposer.org/installer | php
+3) Slim Framework Installation
+	A pre-packaged RESTful framework that has all the necessary functions built in to execute Backbone server queries
+
+	1. Install using Composer:  
+		https://getcomposer.org/download/  
 	
-	php composer install
+		Here are the commands to install Composer and Slim:  
+		```
+		curl -sS https://getcomposer.org/installer | php
+		
+		php composer install
+		
+		php composer update
+		
+		cd TuxSeeto
+		
+		php composer.phar install
+		
+		php composer.phar update
+		```
+	2. URL Rewriting
+		1. Navigate to the following directory on your server:  
+			```
+			/etc/httpd/conf/httpd.conf
+			```
+		2. Locate the code block for  
+			```<Directory "/var/www/html">```  
 	
-	php composer update
-	
-	cd TuxSeeto
-	
-	php composer.phar install
-	
-	php composer.phar update
-	```
-2. URL Rewriting
-	1. Create a .htaccess file  
-		```
-		vi .htaccess
-		```
-		Include the following in the file:  
-		```
-		RewriteEngine On
-		
-		RewriteCond %{REQUEST_FILENAME} !-f
-		
-		RewriteCond %{REQUEST_FILENAME} !-d
-		
-		RewriteRule ^ index.php [QSA,L]
-		```
-	2. Navigate to the following directory on your server:  
-		```
-		/etc/httpd/conf/httpd.conf
-		```
-	3. Locate the code block for  
-		```<Directory "/var/www/html">```  
-
-		Replace the following:  
-		```AllowOverRide None```  
-		
-		With the following:  
-		```AllowOverride All```  
-		
-		This should allow .htaccess to perform URL rewriting!
-
-## Backbone.js
-Download or reference resource from the following link:  
-https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.2.0/backbone-min.js
-
-## Underscore.js
-Download or reference resource from the following link:  
-https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js
+			Replace the following:  
+			```AllowOverRide None```  
+			
+			With the following:  
+			```AllowOverride All```  
+			
+			This should allow api/.htaccess to perform URL rewriting!
 
 # Troubleshooting
 ## 403 Forbidden Error:
