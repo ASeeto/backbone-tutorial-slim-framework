@@ -35,3 +35,7 @@ Prerequisites: LAMP Server (Linux, Apache, MySQL, PHP) - [10 Step Guide](https:/
 	```
 	/var/log/httpd
 	```
+
+# Resources
+Please check out the project below for more information.
+- [Backbone Tutorial](https://github.com/thomasdavis/backbonetutorials/tree/gh-pages/videos/beginner) by [Thomas Davis](https://github.com/thomasdavis)
