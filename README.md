@@ -17,42 +17,6 @@ Prerequisites: LAMP Server (Linux, Apache, MySQL, PHP) - [10 Step Guide](https:/
   mysql directory -uroot < items.sql
   ```
 
-3) Slim Framework Installation
-	A pre-packaged RESTful framework that has all the necessary functions built in to execute Backbone server queries
-
-	1. Install using Composer:  
-		https://getcomposer.org/download/  
-	
-		Here are the commands to install Composer and Slim:  
-		```
-		curl -sS https://getcomposer.org/installer | php
-		
-		php composer install
-		
-		php composer update
-		
-		cd TuxSeeto
-		
-		php composer.phar install
-		
-		php composer.phar update
-		```
-	2. URL Rewriting
-		1. Navigate to the following directory on your server:  
-			```
-			/etc/httpd/conf/httpd.conf
-			```
-		2. Locate the code block for  
-			```<Directory "/var/www/html">```  
-	
-			Replace the following:  
-			```AllowOverRide None```  
-			
-			With the following:  
-			```AllowOverride All```  
-			
-			This should allow api/.htaccess to perform URL rewriting!
-
 # Troubleshooting
 ## 403 Forbidden Error:
 - Correct the file permissions so Apache is able to access referenced files
